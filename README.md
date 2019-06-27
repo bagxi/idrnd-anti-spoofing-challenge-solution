@@ -2,7 +2,6 @@
 
 ## NN pipeline
 
-```
 	# prepare data & train 5 folds
 	python run_nn.py prepare-folds \
 		--in-dir=./data/train \
@@ -30,11 +29,9 @@
 		--weights-path=./models/easy_gold.pth \
 		--batch-size=256 \
 		--n-workers=4
-```
 
 ## LBP pipeline
 
-```
 	# prepare data & train model
 	python run_lbp.py prepare-cutout-datasets \
 		--in-dir=./data/train \
@@ -59,4 +56,7 @@
 		--in-dir=$PATH_INPUT \
 		--out-csv=$PATH_OUTPUT/solution.csv \
 		--weights-path=./logs/lbp/model.pkl
-```
+
+## Copyright and License
+© Copyright 2019-present Yauheni Kachan.
+Licensed under the [MIT License](LICENSE.md).

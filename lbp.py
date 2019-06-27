@@ -1,3 +1,8 @@
+# Copyright (c) 2019-present, Yauheni Kachan. All Rights Reserved.
+#
+# This source code is licensed under the license found in the LICENSE file in
+# the root directory of this source tree.
+
 """
 Anti-spoofing based on LBP:
 - http://www.outex.oulu.fi/publications/pami_02_opm.pdf
