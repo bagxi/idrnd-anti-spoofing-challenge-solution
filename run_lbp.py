@@ -3,8 +3,6 @@
 # This source code is licensed under the license found in the LICENSE file in
 # the root directory of this source tree.
 
-import functools
-import multiprocessing
 import os
 import pickle
 
@@ -38,23 +36,18 @@ def infer(
         classificator=load_model(weights_path),
         agg_fn=gmean
     )
-    predict_sample_ = functools.partial(predict_sample, model=model, rootpath=in_dir)
-    samples = pd.read_csv(in_csv).to_dict('records')[:10]
-    with multiprocessing.Pool(n_workers) as p:
-        preds = p.map(predict_sample_, samples)
+    df = pd.read_csv(in_csv)
+    samples, frames, probabilities = [], [], []
+    for idx, image_info in tqdm(df.iterrows(), total=df.shape[0], disable=not verbose):
+        image = imread(image_info['path'], rootpath=in_dir)
+        probability = model.predict(image)
+        samples.append(image_info['id'])
+        frames.append(image_info['frame'])
+        probabilities.append(probability)
 
-    samples, frames, probabilities = zip(*preds)
     df = pd.DataFrame.from_dict({'id': samples, 'frame': frames, 'prediction': probabilities})
     df = df.groupby('id')['prediction'].apply(gmean).reset_index()
     df[['id', 'prediction']].to_csv(out_csv, index=False)
-
-
-def predict_sample(image_info, model, rootpath: str = None):
-    print('predict')
-    image = imread(image_info['path'], rootpath=rootpath)
-    probability = model.predict(image)
-
-    return image_info['id'], image_info['frame'], probability
 
 
 def load_model(filepath):
